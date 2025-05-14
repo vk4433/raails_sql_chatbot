@@ -1,0 +1,54 @@
+<div class="container my-5">
+  <% if @sql_credential %>
+    <div class="card shadow rounded-4 border-0 mb-4">
+      <div class="card-header bg-primary text-white text-center">
+        <h2 class="mb-0"><i class="bi bi-database-fill-gear"></i> Your SQL Credential</h2>
+      </div>
+      <div class="card-body">
+        <p><strong>Host:</strong> <span class="badge badge-secondary"><%= @sql_credential.host %></span></p>
+        <p><strong>Username:</strong> <span class="badge badge-secondary"><%= @sql_credential.username %></span></p>
+        <p><strong>Database:</strong> <span class="badge badge-secondary"><%= @sql_credential.database %></span></p>
+
+        <div class="mt-4">
+          <%= link_to 'Edit SQL Credential', edit_sql_credential_path(@sql_credential), class: 'btn btn-warning mr-2' %>
+          <%= link_to 'Chat with Database', chathistory_index_path, class: 'btn btn-success' %>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="alert alert-info text-center">
+      <h4>No SQL Credential Found</h4>
+      <p>Please add your database details to continue.</p>
+    </div>
+  <% end %>
+
+  <% if @tables_info.present? %>
+    <div class="card shadow rounded-4 border-0">
+      <div class="card-header bg-info text-white text-center">
+        <h3 class="mb-0">📊 Database Structure</h3>
+      </div>
+      <div class="card-body">
+        <% @current_page_tables.each do |table| %>
+          <div class="mb-4">
+            <h5 class="text-primary">🧾 Table: <strong><%= table[:table_name] %></strong></h5>
+            <ul class="list-group list-group-flush">
+              <% table[:columns].each do |column| %>
+                <li class="list-group-item"><i class="bi bi-arrow-right-short"></i> <%= column %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <!-- Center the pagination controls -->
+        <div class="d-flex justify-content-center mt-4">
+          <%= paginate @tables_info, previous_label: 'Prev', next_label: 'Next', outer_window: 0, inner_window: 2 %>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="alert alert-warning mt-4 text-center">
+      <h5>No Tables Available</h5>
+      <p>Your database does not have any tables yet. Please create tables to start using the database.</p>
+    </div>
+  <% end %>
+</div>

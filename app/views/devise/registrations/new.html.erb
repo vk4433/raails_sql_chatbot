@@ -1,0 +1,76 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Sign up</h2>
+          
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation", novalidate: true }) do |f| %>
+            <%= render "devise/shared/error_messages", resource: resource %>
+
+            <div class="mb-3">
+              <%= f.label :email, class: "form-label" %>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
+              <div class="invalid-feedback">
+                Please enter a valid email address.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :password, class: "form-label" %>
+              <%= f.password_field :password, autocomplete: "new-password", class: "form-control", required: true %>
+              <% if @minimum_password_length %>
+                <div class="form-text">
+                  (<%= @minimum_password_length %> characters minimum)
+                </div>
+              <% end %>
+              <div class="invalid-feedback">
+                Please enter a password.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :password_confirmation, class: "form-label" %>
+              <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", required: true %>
+              <div class="invalid-feedback">
+                Please confirm your password.
+              </div>
+            </div>
+
+            <div class="d-grid mb-3">
+              <%= f.submit "Sign up", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+
+          <div class="text-center">
+            <%= render "devise/shared/links" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap 5 JavaScript for form validation -->
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function () {
+    'use strict'
+    
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+    
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+</script>

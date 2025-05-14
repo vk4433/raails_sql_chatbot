@@ -1,0 +1,38 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-body text-center p-5">
+
+          <% if @sql_credential.present? %>
+            <h1 class="display-5 mb-4 text-success">
+              <i class="bi bi-database-check"></i> Welcome Back to SQL Chatbot
+            </h1>
+            <p class="lead mb-4">You already have an SQL Credential connected.</p>
+
+            <div class="d-grid gap-3 d-md-flex justify-content-center">
+              <%= link_to sql_credential_path(@sql_credential), class: 'btn btn-outline-primary btn-lg px-4' do %>
+                <i class="bi bi-eye-fill"></i> View SQL Credential
+              <% end %>
+
+              <%= link_to edit_sql_credential_path(@sql_credential), class: 'btn btn-outline-warning btn-lg px-4' do %>
+                <i class="bi bi-pencil-square"></i> Edit SQL Credential
+              <% end %>
+            </div>
+
+          <% else %>
+            <h1 class="display-5 mb-4 text-primary">
+              <i class="bi bi-database-add"></i> Welcome to SQL Chatbot
+            </h1>
+            <p class="lead mb-4">You need to create your SQL Credential first to connect to the server.</p>
+
+            <%= link_to new_sql_credential_path, class: 'btn btn-success btn-lg px-4' do %>
+              <i class="bi bi-plus-circle"></i> Create SQL Credential
+            <% end %>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

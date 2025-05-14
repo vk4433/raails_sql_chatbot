@@ -1,0 +1,65 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-info text-white text-center">
+          <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Edit SQL Credential</h4>
+        </div>
+        <div class="card-body p-4">
+
+          <% if @sql_credential.errors.any? %>
+            <div class="alert alert-danger">
+              <h5><%= pluralize(@sql_credential.errors.count, "error") %> prohibited this SQL Credential from being saved:</h5>
+              <ul class="mb-0">
+                <% @sql_credential.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <%= form_with(model: @sql_credential, local: true) do |form| %>
+            <div class="form-group">
+              <%= form.label :host, class: "font-weight-bold" %>
+              <%= form.text_field :host, class: "form-control", placeholder: "e.g., localhost" %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :username, class: "font-weight-bold" %>
+              <%= form.text_field :username, class: "form-control", placeholder: "e.g., root" %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :password, class: "font-weight-bold" %>
+              <%= form.password_field :password, class: "form-control", placeholder: "Your DB password" %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :database, class: "font-weight-bold" %>
+              <%= form.text_field :database, class: "form-control", placeholder: "e.g., my_database" %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :port, class: "font-weight-bold" %>
+              <%= form.number_field :port, class: "form-control", placeholder: "3306" %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :socket, class: "font-weight-bold" %>
+              <%= form.text_field :socket, class: "form-control", placeholder: "/var/run/mysqld/mysqld.sock" %>
+            </div>
+
+            <div class="text-center mt-4">
+              <%= form.submit 'Update SQL Credential', class: "btn btn-info btn-lg px-5 text-white" %>
+            </div>
+          <% end %>
+
+          <div class="text-center mt-3">
+            <%= link_to 'Back', sql_credential_path(@sql_credential), class: "btn btn-outline-secondary" %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

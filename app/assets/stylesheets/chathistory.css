@@ -1,0 +1,34 @@
+/* app/assets/stylesheets/chathistory.css */
+.query-input {
+    width: 300px;
+    padding: 10px;
+  }
+  
+  .submit-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .submit-btn:hover {
+    background-color: #45a049;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    text-align: left;
+    background-color: #f2f2f2;
+  }
+  
