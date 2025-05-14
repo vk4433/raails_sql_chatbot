@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   # After sign in, redirect here
   def after_sign_in_path_for(resource)
+    PostmanMailer.login_account.deliver
     root_path
   end
 
