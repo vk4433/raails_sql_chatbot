@@ -67,6 +67,9 @@
               <p class="lead mb-4 fs-4">Your database is connected.</p>
             <% else %>
               <h2 class="h3 mb-3 text-primary">
+                 <h2 class="h3 mb-3 text-success">
+                <i class="bi bi-database-check me-2"></i>Welcome <%= current_user.email %>
+              </h2>
                 <i class="bi bi-database-add me-2"></i>Get Started!
               </h2>
               <p class="lead mb-4 fs-4">Connect your database now.</p>

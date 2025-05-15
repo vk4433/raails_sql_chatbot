@@ -15,7 +15,6 @@ class ChathistoryController < ApplicationController
     # Execute SQL query
     result = execute_sql_query(sql_query)
 
-    # Save user question and generated SQL
     Chathistory.create!(
       user: current_user,
       question: user_query,
