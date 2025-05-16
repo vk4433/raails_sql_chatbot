@@ -29,26 +29,34 @@ class SqlCredentialsController < ApplicationController
       end
     end
   end
-
+  
   def show
     @sql_credential = current_user.sql_credential
+  
     if @sql_credential.present?
       mysql_connector = MysqlConnector.new(@sql_credential)
-      tables_data = mysql_connector.fetch_tables_and_columns
-      # Paginate the array of table names (keys) using Kaminari
-      @tables_info = Kaminari.paginate_array(tables_data.keys).page(params[:page]).per(3)
-
-      # Prepare an array of columns for the current page"s tables
-      @current_page_tables = @tables_info.map { |table_name|
-        {
-          table_name: table_name,
-          columns: tables_data[table_name] || []  # Ensure columns is never nil
-        }
-      }
+  
+      if mysql_connector.check_credential
+        tables_data = mysql_connector.fetch_tables_and_columns
+  
+        @tables_info = Kaminari.paginate_array(tables_data.keys).page(params[:page]).per(3)
+  
+        @current_page_tables = @tables_info.map do |table_name|
+          {
+            table_name: table_name,
+            columns: tables_data[table_name] || []
+          }
+        end
+      else
+        flash[:alert] = "Invalid database credentials. Please update them to proceed."
+        redirect_to edit_sql_credential_path(@sql_credential)
+      end
     else
-      @tables_info = []
+      flash[:alert] = "No database credentials found."
+      redirect_to new_sql_credential_path
     end
   end
+  
 
   # Edit action to load the current SQL credential
   def edit
