@@ -33,28 +33,6 @@
   <div class="container my-5"> <!-- Reduced margin -->
     <h1 class="display-3 text-center mb-4">SQL Chatbot</h1> <!-- Tightened title -->
 
-    <!-- Flash Messages -->
-    <% if flash[:error] || flash[:alert] %>
-      <div class="row justify-content-center">
-        <div class="col-lg-10">
-          <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-            <%= flash[:error] || flash[:alert] %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        </div>
-      </div>
-    <% end %>
-    <% if flash[:notice] %>
-      <div class="row justify-content-center">
-        <div class="col-lg-10">
-          <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            <%= flash[:notice] %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        </div>
-      </div>
-    <% end %>
-
     <!-- Welcome and About Section -->
     <div class="row justify-content-center">
       <div class="col-lg-10">
