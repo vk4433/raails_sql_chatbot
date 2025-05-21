@@ -1,4 +1,5 @@
 class ChathistoryController < ApplicationController
+  before_action :authenticate_user!
   before_action :validate_query, only: :create
   layout false
 
