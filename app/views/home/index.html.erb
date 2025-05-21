@@ -40,7 +40,7 @@
       text-align: center;
       border-radius: 0 0 1rem 1rem;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-      padding: 2rem 0;
+      padding: 3rem 0;
       background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1620121692029-d088224ddc74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
       background-size: cover;
       background-position: center;
@@ -67,20 +67,36 @@
       opacity: 0.9;
       margin-bottom: 1.5rem;
     }
-    .hero-section .btn {
-      border-radius: 50px;
-      padding: 0.75rem 2rem;
-      font-weight: 600;
-      font-size: 1.1rem;
-      background: linear-gradient(45deg, #16a34a, #22c55e);
-      border: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    .hero-section .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
     }
 
-    /* Action Buttons Section */
-    .action-buttons {
-      padding: 1.5rem 0;
-      text-align: center;
+    /* About Section */
+    .about-section {
+      padding: 3rem 0;
+      background: #fff;
+    }
+    .about-card {
+      background: #f8fafc;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 2rem;
+    }
+    .about-card h2 {
+      font-size: 1.8rem;
+      color: #1e3a8a;
+      margin-bottom: 1rem;
+    }
+    .about-card p {
+      font-size: 1.1rem;
+      color: #4b5563;
+      margin-bottom: 0.5rem;
+    }
+    .about-card .highlight {
+      color: #16a34a;
+      font-weight: 600;
     }
 
     /* Feature Section */
@@ -122,11 +138,13 @@
     }
     .btn-outline-primary {
       border-color: #3b82f6;
-      color: #3b82f6;
+      color: #fff;
+      border-color: #fff;
     }
     .btn-outline-warning {
       border-color: #d97706;
-      color: #d97706;
+      color: #fff;
+      border-color: #fff;
     }
 
     /* Footer */
@@ -154,25 +172,11 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <%= link_to "Home", home_index_path, class: "nav-link active" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Chat with Database", chathistory_index_path, class: "nav-link" %>
-          </li>
-          <% if @sql_credential.present? %>
-            <li class="nav-item">
-              <%= link_to "Credentials", sql_credential_path(@sql_credential), class: "nav-link" %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
+      
     </div>
   </nav>
 
-  <!-- Hero Section with Image and Welcome Message -->
+  <!-- Hero Section with Image and Action Buttons -->
   <div class="hero-section">
     <div class="welcome-message">
       <% if @sql_credential.present? %>
@@ -187,33 +191,36 @@
     </div>
     <h1>SQL Chatbot</h1>
     <p>Query your database with natural language.</p>
-    <% if @sql_credential.present? %>
-      <%= link_to "Start Querying", chathistory_index_path, class: "btn btn-success" %>
-    <% else %>
-      <%= link_to "Connect Database", new_sql_credential_path, class: "btn btn-success" %>
-    <% end %>
+    <div class="action-buttons">
+      <% if @sql_credential.present? %>
+        <%= link_to sql_credential_path(@sql_credential), class: "btn btn-outline-primary btn-lg px-4" do %>
+          <i class="bi bi-eye-fill me-2"></i>View Credential
+        <% end %>
+        <%= link_to edit_sql_credential_path(@sql_credential), class: "btn btn-outline-warning btn-lg px-4" do %>
+          <i class="bi bi-pencil-square me-2"></i>Edit Credential
+        <% end %>
+        <%= link_to chathistory_index_path, class: "btn btn-success btn-lg px-4" do %>
+          <i class="bi bi-chat-dots me-2"></i>Start Querying
+        <% end %>
+      <% else %>
+        <%= link_to new_sql_credential_path, class: "btn btn-success btn-lg px-4" do %>
+          <i class="bi bi-plus-circle me-2"></i>Create Credential
+        <% end %>
+      <% end %>
+    </div>
   </div>
 
-  <!-- Action Buttons Section -->
-  <div class="container action-buttons">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="d-flex gap-3 justify-content-center">
-          <% if @sql_credential.present? %>
-            <%= link_to sql_credential_path(@sql_credential), class: "btn btn-outline-primary btn-lg px-4" do %>
-              <i class="bi bi-eye-fill me-2"></i>View Credential
-            <% end %>
-            <%= link_to edit_sql_credential_path(@sql_credential), class: "btn btn-outline-warning btn-lg px-4" do %>
-              <i class="bi bi-pencil-square me-2"></i>Edit Credential
-            <% end %>
-            <%= link_to chathistory_index_path, class: "btn btn-success btn-lg px-4" do %>
-              <i class="bi bi-chat-dots me-2"></i>Start Querying
-            <% end %>
-          <% else %>
-            <%= link_to new_sql_credential_path, class: "btn btn-success btn-lg px-4" do %>
-              <i class="bi bi-plus-circle me-2"></i>Create Credential
-            <% end %>
-          <% end %>
+  <!-- About the Website Section -->
+  <div class="about-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="about-card text-center">
+            <h2>About SQL Chatbot</h2>
+            <p>SQL Chatbot is a <span class="highlight">powerful tool</span> designed to simplify database management by allowing you to query your database using natural language. Say goodbye to complex SQL syntax—our AI generates accurate queries for you in seconds.</p>
+            <p>Whether you're a <span class="highlight">developer</span>, <span class="highlight">data analyst</span>, or <span class="highlight">business professional</span>, SQL Chatbot helps you explore database structures, securely manage credentials, and review your query history with ease.</p>
+            <p>Built with security and efficiency in mind, SQL Chatbot ensures your data is protected while providing a seamless user experience.</p>
+          </div>
         </div>
       </div>
     </div>

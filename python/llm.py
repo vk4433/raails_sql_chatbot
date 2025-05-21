@@ -21,6 +21,7 @@ def query_generator(schema, user_q):
     - Uses proper SQL syntax.
     - Includes necessary joins, conditions, or aggregations and subqueries etc..
     - Is efficient and avoids unnecessary complexity.
+    - for every query give limit 20.
     - No information in schema → return "Wrong database selected."
     Provide only the SQL query without any explanation, markdown, or code block formatting.
     """
