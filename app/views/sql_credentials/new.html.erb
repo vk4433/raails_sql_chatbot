@@ -1,67 +1,8 @@
-<% if current_user.sql_credential.present? %>
+<% if current_user.sql_credential&.persisted? %>
   <div class="alert alert-info mt-4">
     You already have an SQL credential.
-    <%= link_to 'View your credential', sql_credential_path(current_user.sql_credential.first), class: 'btn btn-outline-primary btn-sm ml-2' %>
+    <%= link_to 'View your credential', sql_credential_path(current_user.sql_credential), class: 'btn btn-outline-primary btn-sm ml-2' %>
   </div>
 <% else %>
-  <div class="container my-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card shadow-lg rounded-4">
-          <div class="card-header bg-primary text-white text-center">
-            <h4 class="mb-0"><i class="bi bi-database-fill-gear"></i> Connect to Your SQL Database</h4>
-          </div>
-          <div class="card-body p-4">
-
-            <% if @sql_credential.errors.any? %>
-              <div class="alert alert-danger">
-                <h5><%= pluralize(@sql_credential.errors.count, "error") %> prohibited this SQL Credential from being saved:</h5>
-                <ul class="mb-0">
-                  <% @sql_credential.errors.full_messages.each do |message| %>
-                    <li><%= message %></li>
-                  <% end %>
-                </ul>
-              </div>
-            <% end %>
-
-            <%= form_with(model: @sql_credential, local: true) do |form| %>
-              <div class="form-group">
-                <%= form.label :host, class: "font-weight-bold" %>
-                <%= form.text_field :host, class: "form-control", placeholder: "e.g., localhost" %>
-              </div>
-
-              <div class="form-group">
-                <%= form.label :username, class: "font-weight-bold" %>
-                <%= form.text_field :username, class: "form-control", placeholder: "e.g., root" %>
-              </div>
-
-              <div class="form-group">
-                <%= form.label :password, class: "font-weight-bold" %>
-                <%= form.password_field :password, class: "form-control", placeholder: "Your DB password" %>
-              </div>
-
-              <div class="form-group">
-                <%= form.label :database, class: "font-weight-bold" %>
-                <%= form.text_field :database, class: "form-control", placeholder: "e.g., my_database" %>
-              </div>
-
-              <div class="form-group">
-                <%= form.label :port, class: "font-weight-bold" %>
-                <%= form.number_field :port, class: "form-control", placeholder: "3306" %>
-              </div>
-
-              <div class="form-group">
-                <%= form.label :socket, class: "font-weight-bold" %>
-                <%= form.text_field :socket, class: "form-control", placeholder: "/var/run/mysqld/mysqld.sock" %>
-              </div>
-
-              <div class="text-center mt-4">
-                <%= form.submit "Save Credential", class: "btn btn-success btn-lg px-5" %>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <%= render 'form', sql_credential: @sql_credential %>
 <% end %>

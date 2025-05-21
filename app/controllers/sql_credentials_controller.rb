@@ -25,7 +25,7 @@ class SqlCredentialsController < ApplicationController
       if @sql_credential.save
         redirect_to sql_credential_path(@sql_credential), notice: "SQL Credential saved successfully."
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
   end
@@ -70,7 +70,7 @@ class SqlCredentialsController < ApplicationController
     if @sql_credential.update(sql_credential_params)
       redirect_to sql_credential_path(@sql_credential), notice: "SQL Credential updated successfully."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

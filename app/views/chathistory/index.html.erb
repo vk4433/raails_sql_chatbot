@@ -1,101 +1,242 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SQL Chatbot</title>
+
   <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <!-- Custom CSS for layout tweaks -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
   <style>
-    .chat-history-card {
-      max-height: 450px; /* Increased slightly for larger layout */
+    body {
+      background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #2d3748;
+    }
+    .container-fluid {
+      padding: 2rem;
+    }
+    .tables-card, .chat-card {
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .tables-card:hover, .chat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    }
+    .tables-card .card-body, .chat-history-card {
+      max-height: 600px; /* Increased height to accommodate more tables */
       overflow-y: auto;
-      background-color: #f8f9fa;
+      padding: 1rem; /* Reduced padding for more compact display */
     }
-    .flash-card {
-      animation: fadeIn 0.5s ease-in;
+    .chat-history-card {
+      background-color: #f8fafc;
+      border-radius: 0.75rem;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .card-header {
+      border-radius: 0.75rem 0.75rem 0 0 !important;
+      padding: 1rem;
+      background: linear-gradient(45deg, #3b82f6, #60a5fa);
+      color: #fff;
+    }
+    .table-divider + .table-divider {
+      margin-top: 1rem; /* Reduced for more compact display */
+      border-top: 1px solid #e2e8f0;
+      padding-top: 0.5rem;
+    }
+    .table-divider h5 {
+      font-size: 1.1rem; /* Slightly smaller for better fit */
+      margin-bottom: 0.5rem;
+    }
+    .list-group-item {
+      padding: 0.3rem 0; /* Reduced padding for compact column list */
+      font-size: 0.9rem; /* Smaller font size for columns */
     }
     pre {
-      background-color: #e9ecef;
-      padding: 15px; /* Larger padding for bigger layout */
-      border-radius: 5px;
-      font-size: 1rem; /* Larger font for code */
+      background-color: #f1f5f9;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border-left: 4px solid #3b82f6;
     }
-    .card-body {
-      padding: 2rem; /* More spacious card padding */
+    .btn-primary {
+      background: linear-gradient(45deg, #2563eb, #3b82f6);
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(45deg, #1e40af, #2563eb);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(45deg, #16a34a, #22c55e);
+      border: none;
+      padding: 0.5rem 1.25rem;
+      font-size: 1rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    .btn-back:hover, .btn-back:focus {
+      background: linear-gradient(45deg, #15803d, #16a34a);
+      box-shadow: 0 6px 16px rgba(22, 163, 74, 0.4);
+      color: #f0fdf4;
+    }
+    .alert {
+      font-weight: 600;
+      border-radius: 0.5rem;
+    }
+    h1.display-4 {
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 0;
+    }
+    .table-responsive table {
+      background: #fff;
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+    .table-responsive tbody tr:nth-child(odd) {
+      background-color: #f8fafc;
+    }
+    .table-responsive tbody tr:hover {
+      background-color: #e0e7ff;
+    }
+    /* Scrollbar Styling */
+    .tables-card .card-body::-webkit-scrollbar,
+    .chat-history-card::-webkit-scrollbar {
+      width: 8px;
+    }
+    .tables-card .card-body::-webkit-scrollbar-thumb,
+    .chat-history-card::-webkit-scrollbar-thumb {
+      background-color: #93c5fd;
+      border-radius: 4px;
+    }
+    .tables-card .card-body::-webkit-scrollbar-track,
+    .chat-history-card::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
     }
   </style>
 </head>
 <body>
-  <div class="container my-6"> <!-- Increased margin -->
-    <h1 class="display-3 text-center mb-5">SQL Chatbot</h1> <!-- Larger title -->
-
-    <!-- Form Section -->
-    <div class="row justify-content-center">
-      <div class="col-lg-10"> <!-- Wider column -->
-        <div class="card shadow-sm mb-4">
+  <div class="container-fluid my-4">
+    <div class="row gx-4">
+      <!-- LEFT COLUMN: Database Structure -->
+      <div class="col-lg-4 mb-4">
+        <div class="card tables-card h-100 shadow-sm">
+          <div class="card-header bg-info text-white text-center">
+            <h3 class="mb-0"><i class="bi bi-table me-2"></i>Database Structure</h3>
+          </div>
           <div class="card-body">
-            <%= form_with url: chathistory_index_path, method: :post, local: true do |form| %>
-              <div class="mb-4">
-                <%= form.label :query, "Ask a question:", class: "form-label fw-bold fs-4" %> <!-- Larger label -->
-                <%= form.text_field :query, placeholder: "Type your question here", class: "form-control form-control-lg", style: "width: 100%;" %> <!-- Larger input -->
-              </div>
-              <div class="d-flex justify-content-end">
-                <%= form.submit "Submit", class: "btn btn-primary btn-lg" %> <!-- Larger button, aligned right -->
+            <% if @tables_info.present? %>
+              <% @tables_info.each do |table| %> 
+                <div class="mb-4 table-divider">
+                  <h5 class="text-primary fs-5">
+                    <i class="bi bi-table me-2"></i>
+                    Table: <strong><%= table[:table_name] %></strong>
+                  </h5>
+                  <ul class="list-group list-group-flush shadow-sm rounded">
+                    <% table[:columns].each do |column| %>
+                      <li class="list-group-item d-flex align-items-center">
+                        <i class="bi bi-arrow-right-short text-info me-2 fs-5"></i>
+                        <span><%= column %></span>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+            <% else %>
+              <div class="alert alert-warning text-center">
+                <strong>No Tables Available</strong><br>
+                Please create tables to use the database.
               </div>
             <% end %>
           </div>
         </div>
-        <!-- Back Button -->
-        <div class="mb-4">
-          <%= link_to "Back", "/sql_credentials/show", class: "btn btn-success btn-lg" %> <!-- Larger button, below form -->
-        </div>
       </div>
-    </div>
 
-    <!-- Error Message -->
-    <% if flash[:error] %>
-      <div class="row justify-content-center">
-        <div class="col-lg-10">
-          <div class="alert alert-danger alert-dismissible fade show flash-card" role="alert">
+      <!-- RIGHT COLUMN: Chatbot Interface -->
+      <div class="col-lg-8">
+        <!-- Header with Button -->
+        <div class="header-section">
+          <h1 class="display-4">SQL Chatbot</h1>
+          <%= link_to (content_tag(:i, "", class: "bi bi-arrow-left-circle-fill fs-5") + " Back to Credentials").html_safe, "/sql_credentials/show", class: "btn btn-back" %>
+        </div>
+
+        <!-- Form -->
+        <div class="card shadow-sm mb-4 chat-card rounded-4">
+          <div class="card-body">
+            <%= form_with url: chathistory_index_path, method: :post, local: true do |form| %>
+              <div class="mb-3">
+                <%= form.label :query, "Ask a question:", class: "form-label fw-bold fs-5" %>
+                <%= form.text_field :query, placeholder: "Type your question here...", class: "form-control form-control-lg shadow-sm" %>
+              </div>
+              <div class="d-flex justify-content-end">
+                <%= form.submit "Submit", class: "btn btn-primary" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Flash Messages -->
+        <% if flash[:error] %>
+          <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
             <%= flash[:error] %>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
-        </div>
-      </div>
-    <% end %>
+        <% end %>
 
-    <!-- Flash Messages (Question, Query, Result) -->
-    <% if flash[:question] || flash[:executed_query] || flash[:result] %>
-      <div class="row justify-content-center">
-        <div class="col-lg-10">
-          <div class="card shadow-sm mb-4 flash-card">
+        <!-- Display Result -->
+        <% if @question || @executed_query || @query_result %>
+          <div class="card shadow-sm mb-4 chat-card rounded-4">
             <div class="card-body">
-              <% if flash[:question] %>
-                <h2 class="card-title h3">Question</h2> <!-- Larger header -->
-                <pre class="mb-3"><%= flash[:question] %></pre>
+              <% if @question %>
+                <h2 class="h5 fw-semibold mb-3">Question</h2>
+                <pre><%= @question %></pre>
               <% end %>
 
-              <% if flash[:executed_query] %>
-                <h2 class="card-title h3">Generated SQL Query</h2>
-                <pre class="mb-3"><%= flash[:executed_query] %></pre>
+              <% if @executed_query %>
+                <h2 class="h5 fw-semibold mb-3 mt-4">Generated SQL Query</h2>
+                <pre><%= @executed_query %></pre>
               <% end %>
 
-              <% if flash[:result] %>
-                <h2 class="card-title h3">Query Result</h2>
-                <div class="table-responsive">
-                  <table class="table table-striped table-bordered">
+              <% if @query_result && @query_result.any? %>
+                <h2 class="h5 fw-semibold mb-3 mt-4">Query Result</h2>
+                <div class="table-responsive rounded shadow-sm">
+                  <table class="table table-bordered table-hover mb-0">
                     <thead class="table-dark">
                       <tr>
-                        <% flash[:result].first&.keys&.each do |column| %>
-                          <th><%= column.capitalize %></th>
+                        <% @query_result.first.keys.each do |column| %>
+                          <th class="text-capitalize"><%= column.to_s.gsub('_', ' ') %></th>
                         <% end %>
                       </tr>
                     </thead>
                     <tbody>
-                      <% flash[:result].each do |row| %>
+                      <% @query_result.each do |row| %>
                         <tr>
                           <% row.values.each do |value| %>
                             <td><%= value %></td>
@@ -105,32 +246,31 @@
                     </tbody>
                   </table>
                 </div>
+                <div class="d-flex justify-content-center mt-3">
+                  <%= paginate @query_result %>
+                </div>
               <% end %>
             </div>
           </div>
-        </div>
-      </div>
-    <% end %>
+        <% end %>
 
-    <!-- Chat History -->
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <div class="card shadow-sm">
+        <!-- Chat History -->
+        <div class="card shadow-sm chat-card rounded-4">
           <div class="card-header bg-primary text-white">
-            <h2 class="h3 mb-0">Chat History</h2> <!-- Larger header -->
+            <h2 class="h5 mb-0"><i class="bi bi-chat-dots me-2"></i>Chat History</h2>
           </div>
           <div class="card-body chat-history-card">
             <% if @chat_history&.any? %>
               <% @chat_history.each do |chat| %>
                 <div class="mb-4 border-bottom pb-3">
-                  <strong class="fs-5">Question:</strong> <!-- Larger text -->
+                  <strong class="text-secondary">Question:</strong>
                   <pre class="mb-2"><%= chat.question %></pre>
-                  <strong class="fs-5">SQL Query:</strong>
+                  <strong class="text-secondary">SQL Query:</strong>
                   <pre><%= chat.generated_sql %></pre>
                 </div>
               <% end %>
             <% else %>
-              <p class="text-muted fs-5">No chat history available.</p> <!-- Larger text -->
+              <p class="text-muted text-center">No chat history available.</p>
             <% end %>
           </div>
         </div>
@@ -138,7 +278,7 @@
     </div>
   </div>
 
-  <!-- Bootstrap 5 JS (with Popper.js) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <!-- Bootstrap 5 JS Bundle (with Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12N9kvjL3r+IOkgZRnFwrjI6jk/30kH6f+6lYZb6Y8TR15vG" crossorigin="anonymous"></script>
 </body>
 </html>
