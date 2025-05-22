@@ -12,18 +12,23 @@ def query_generator(schema, user_q):
     
     prompt = f"""
     You are an expert in writing optimized and accurate MySQL queries.
-    Given the following database schema:
-    {schema}
-    And the user's question:
-    {user_q}
-    Generate a valid MySQL query that correctly retrieves or manipulates the data.
-    Ensure the query:
-    - Uses proper SQL syntax.
-    - Includes necessary joins, conditions, or aggregations and subqueries etc..
-    - Is efficient and avoids unnecessary complexity.
-    -  if the result has more rows applay limit 40 .
-    - No information in schema → return "Wrong database selected."
-    Provide only the SQL query without any explanation, markdown, or code block formatting.
+
+Given the following database schema:
+{schema}
+
+And the user's question:
+{user_q}
+
+Generate a valid MySQL query that correctly retrieves or manipulates the data. Ensure the query:
+- Uses proper SQL syntax.
+- Includes necessary joins, conditions, aggregations, subqueries, etc.
+- Is efficient and avoids unnecessary complexity.
+- Applies `LIMIT 40` if the result may return more than 40 rows.
+- Does **not** apply `LIMIT` for aggregate or count queries.
+- If the schema is empty or missing, return exactly: Wrong database selected.
+
+Return only the SQL query, with no explanations, markdown, or formatting.
+
     """
 
     response = model.generate_content(prompt).text.strip()
