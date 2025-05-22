@@ -3,7 +3,7 @@ default: &default
   encoding: utf8mb4
   pool: 5
   username: root
-  password: 2211
+  password: 
   host: localhost
   socket: /var/run/mysqld/mysqld.sock
 
@@ -13,7 +13,7 @@ development:
 
 test:
   <<: *default
-  database: sql_chat_test
+  # database: sql_chat_test
 
 production:
   <<: *default
