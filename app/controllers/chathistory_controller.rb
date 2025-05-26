@@ -74,12 +74,14 @@ class ChathistoryController < ApplicationController
   end
 
   def fetch_schema
+    
     connector = MysqlConnector.new(current_user.sql_credential)
     schema = connector.fetch_tables_and_columns
     schema.map { |table, columns| "#{table}(#{columns.join(', ')})" }.join(", ")
   end
 
   def execute_sql_query(sql_query)
+    
     sql_query = sql_query.strip
 
     client = Mysql2::Client.new(

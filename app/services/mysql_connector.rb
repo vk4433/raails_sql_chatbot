@@ -1,8 +1,10 @@
 require 'mysql2'
+require 'logger'
 
 class MysqlConnector
   def initialize(sql_credential)
     @sql_credential = sql_credential
+    @logger = Logger.new(STDOUT)
   end
 
   def check_credential
@@ -18,7 +20,7 @@ class MysqlConnector
       client.close
       true
     rescue Mysql2::Error => e
-      Rails.logger.error("MySQL connection failed: #{e.message}")
+      @logger.error("MySQL connection failed: #{e.message}")
       false
     end
   end
@@ -52,7 +54,7 @@ class MysqlConnector
       client.close
       tables_info
     rescue Mysql2::Error => e
-      Rails.logger.error("Error fetching tables/columns: #{e.message}")
+      @logger.error("Error fetching tables/columns: #{e.message}")
       {}
     end
   end
