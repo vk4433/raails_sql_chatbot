@@ -1,22 +1,25 @@
 default: &default
-  adapter: mysql2
-  encoding: utf8mb4
-  pool: 5
-  username: root
-  password: 
-  host: localhost
-  socket: /var/run/mysqld/mysqld.sock
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
 development:
   <<: *default
-  database: sql_chat_development
+  database: sql_chatbot_development
+  # Keep MySQL configuration for local development if needed
+  # adapter: mysql2
+  # encoding: utf8mb4
+  # username: root
+  # password: 
+  # host: localhost
+  # socket: /var/run/mysqld/mysqld.sock
+  # database: sql_chat_development
 
 test:
   <<: *default
-  # database: sql_chat_test
+  database: sql_chatbot_test
 
 production:
   <<: *default
-  database: sql_chat_production
-  # username: <%= ENV['MYSQL_USERNAME'] %>
-  # password: <%= ENV['MYSQL_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
