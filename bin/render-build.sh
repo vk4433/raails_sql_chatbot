@@ -14,9 +14,14 @@ bundle install
 bundle exec rake assets:precompile
 bundle exec rake assets:clean
 
-# Run database migrations
-echo "Running database migrations..."
+# Run database migrations with more verbose output
+echo "Setting up database..."
+bundle exec rake db:migrate:status || true
+echo "Running schema load..."
+bundle exec rake db:schema:load || true
+echo "Running migrations..."
 bundle exec rake db:migrate
+echo "Database setup complete."
 
 # Install Python dependencies
 if [ -f "requirements.txt" ]; then
