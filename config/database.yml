@@ -6,17 +6,17 @@ default: &default
 development:
   <<: *default
   database: sql_chat_development
-  username: postgres
-  password: password
-  host: localhost
+  username: sql_chatbot_production_user
+  password: to0SEdK6gMxoZnIEusytYRmODOUwDWV7
+  host: dpg-d0r0m6e3jp1c739cc7n0-a
   port: 5432
 
 test:
   <<: *default
   database: sql_chat_test
-  username: postgres
-  password: password
-  host: localhost
+  username: sql_chatbot_production_user
+  password: to0SEdK6gMxoZnIEusytYRmODOUwDWV7
+  host: dpg-d0r0m6e3jp1c739cc7n0-a
   port: 5432
 
 production:
