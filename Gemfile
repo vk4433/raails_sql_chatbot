@@ -23,6 +23,7 @@ gem "will_paginate"
 gem 'kaminari'
 gem 'activerecord-session_store'
 gem "pry"
+gem "pg"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
