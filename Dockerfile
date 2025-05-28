@@ -32,7 +32,7 @@ RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
-# ✅ Install Python dependencies inside a virtual environment
+# Install Python dependencies inside a virtual environment
 COPY requirements.txt ./
 RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
@@ -40,7 +40,7 @@ RUN python3 -m venv /opt/venv && \
     pip install --no-cache-dir -r requirements.txt
 ENV PATH="/opt/venv/bin:$PATH"
 
-# ✅ Copy the rest of the Rails app
+# Copy the rest of the Rails app
 COPY . .
 
 # Precompile bootsnap and assets
@@ -48,9 +48,13 @@ RUN bundle exec bootsnap precompile app/ lib/
 ENV DATABASE_URL="postgresql://sql_chatbot_production_user:to0SEdK6gMxoZnIEusytYRmODOUwDWV7@dpg-d0r0m6e3jp1c739cc7n0-a/sql_chatbot_production"
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-
 # ---- FINAL STAGE ----
 FROM base
+
+# Install MySQL client libraries for mysql2 gem runtime
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y default-mysql-client libmariadb3 && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy Ruby gems and full app from build stage
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
@@ -64,7 +68,6 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log storage tmp
 USER 1000:1000
 
-# Entry point and port
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+CMD ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]
