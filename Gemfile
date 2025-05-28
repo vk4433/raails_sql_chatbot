@@ -17,10 +17,8 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 gem "devise"
-# Use PostgreSQL as the database for Active Record
-gem "pg", group: :production
-# Keeping MySQL gem for development if needed
-gem "mysql2", group: [:development, :test]
+# Use MySQL as the database for Active Record
+gem "mysql2"
 gem "will_paginate"
 gem 'kaminari'
 gem 'activerecord-session_store'

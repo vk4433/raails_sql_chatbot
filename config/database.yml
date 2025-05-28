@@ -1,24 +1,23 @@
 default: &default
-  adapter: postgresql
-  encoding: unicode
+  adapter: mysql2
+  encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: root
+  port : 3306
+  password:
+  host: localhost
 
 development:
   <<: *default
   database: sql_chat_development
-  username: sql_chatbot_production_user
-  password: to0SEdK6gMxoZnIEusytYRmODOUwDWV7
-  host: dpg-d0r0m6e3jp1c739cc7n0-a
-  port: 5432
 
 test:
   <<: *default
   database: sql_chat_test
-  username: sql_chatbot_production_user
-  password: to0SEdK6gMxoZnIEusytYRmODOUwDWV7
-  host: dpg-d0r0m6e3jp1c739cc7n0-a
-  port: 5432
 
 production:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] || 'postgresql://sql_chatbot_production_user:to0SEdK6gMxoZnIEusytYRmODOUwDWV7@dpg-d0r0m6e3jp1c739cc7n0-a/sql_chatbot_production' %>
+  database: sql_chatbot_production
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
