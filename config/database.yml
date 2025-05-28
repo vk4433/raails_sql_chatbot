@@ -2,24 +2,26 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
 
 development:
   <<: *default
-  database: sql_chatbot_development
-  # Keep MySQL configuration for local development if needed
-  # adapter: mysql2
-  # encoding: utf8mb4
-  # username: root
-  # password: 
-  # host: localhost
-  # socket: /var/run/mysqld/mysqld.sock
-  # database: sql_chat_development
+  database: sql_chat_development
+  username: postgres
+  password: password
+  host: localhost
+  port: 5432
 
 test:
   <<: *default
-  database: sql_chatbot_test
+  database: sql_chat_test
+  username: postgres
+  password: password
+  host: localhost
+  port: 5432
 
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
+  database: sql_chat_production
+  username: <%= ENV['POSTGRES_USER'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>

@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: sql-chatbot
+    env: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sql-chatbot-db
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_SERVE_STATIC_FILES
+        value: true
+
+databases:
+  - name: sql-chatbot-db
+    databaseName: sql_chat_production
+    plan: free
