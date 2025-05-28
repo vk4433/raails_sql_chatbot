@@ -43,9 +43,11 @@ ENV PATH="/opt/venv/bin:$PATH"
 # ✅ Copy the rest of the Rails app
 COPY . .
 
-# ✅ Precompile bootsnap and Rails assets
+# Precompile bootsnap and assets
 RUN bundle exec bootsnap precompile app/ lib/
+ENV DATABASE_URL="postgresql://sql_chatbot_production_user:to0SEdK6gMxoZnIEusytYRmODOUwDWV7@dpg-d0r0m6e3jp1c739cc7n0-a/sql_chatbot_production"
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+
 
 # ---- FINAL STAGE ----
 FROM base
