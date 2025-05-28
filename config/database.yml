@@ -1,21 +1,20 @@
 default: &default
-  adapter: mysql2
-  encoding: utf8mb4
+  adapter: postgresql
+  encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  port : 3306
-  password:
-  host: localhost
+  username: <%= ENV['PGUSER'] || 'postgres' %>
+  password: <%= ENV['PGPASSWORD'] || '' %>
+  host: <%= ENV['PGHOST'] || 'localhost' %>
+  port: <%= ENV['PGPORT'] || 5432 %>
 
 development:
   <<: *default
-  database: sql_chat_development
+  database: yourapp_development
 
 test:
   <<: *default
-  database: sql_chat_test
+  database: yourapp_test
 
 production:
   url: <%= ENV['DATABASE_URL'] %>
   pool: 5
-
