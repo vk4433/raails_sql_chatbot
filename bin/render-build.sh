@@ -13,6 +13,9 @@ echo "Installing Ruby dependencies..."
 bundle install
 bundle exec rake assets:precompile
 bundle exec rake assets:clean
+
+# Run database migrations
+echo "Running database migrations..."
 bundle exec rake db:migrate
 
 # Install Python dependencies

@@ -21,7 +21,4 @@ test:
 
 production:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
-  database: sql_chat_production
-  username: <%= ENV['POSTGRES_USER'] %>
-  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] || 'postgresql://sql_chatbot_production_user:to0SEdK6gMxoZnIEusytYRmODOUwDWV7@dpg-d0r0m6e3jp1c739cc7n0-a/sql_chatbot_production' %>
