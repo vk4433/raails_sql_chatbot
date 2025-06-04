@@ -5,9 +5,25 @@ if [ -z "${LD_PRELOAD+x}" ] && [ -f /usr/lib/*/libjemalloc.so.2 ]; then
   export LD_PRELOAD="$(echo /usr/lib/*/libjemalloc.so.2)"
 fi
 
+# Wait for MySQL to be ready
+echo "Waiting for MySQL to be ready..."
+while ! mysqladmin ping -h"$MYSQL_HOST" -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" --silent; do
+  sleep 1
+done
+echo "MySQL is ready!"
+
+# Wait for Redis to be ready
+echo "Waiting for Redis to be ready..."
+while ! redis-cli -h $(echo $REDIS_URL | cut -d'/' -f3 | cut -d':' -f1) ping; do
+  sleep 1
+done
+echo "Redis is ready!"
+
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+  echo "Preparing database..."
   ./bin/rails db:prepare
+  echo "Database is ready!"
 fi
 
 exec "${@}"

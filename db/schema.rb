@@ -23,7 +23,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_20_072640) do
 
   create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "session_id", null: false
-    t.text "data", size: :long
+    t.text "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["session_id"], name: "index_sessions_on_session_id", unique: true

@@ -1,5 +1,3 @@
-# syntax = docker/dockerfile:1
-
 ARG RUBY_VERSION=3.2.2
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
@@ -9,13 +7,13 @@ WORKDIR /rails
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     curl libjemalloc2 libvips sqlite3 \
-    python3 python3-pip python3-venv libpq-dev && \
+    python3 python3-pip python3-venv libpq-dev default-mysql-client libmariadb3 && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development:test"
 
 # ---- BUILD STAGE ----
 FROM base AS build
@@ -45,16 +43,10 @@ COPY . .
 
 # Precompile bootsnap and assets
 RUN bundle exec bootsnap precompile app/ lib/
-ENV DATABASE_URL="postgresql://sql_chatbot_production_user:to0SEdK6gMxoZnIEusytYRmODOUwDWV7@dpg-d0r0m6e3jp1c739cc7n0-a/sql_chatbot_production"
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # ---- FINAL STAGE ----
 FROM base
-
-# Install MySQL client libraries for mysql2 gem runtime
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y default-mysql-client libmariadb3 && \
-    rm -rf /var/lib/apt/lists/*
 
 # Copy Ruby gems and full app from build stage
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"

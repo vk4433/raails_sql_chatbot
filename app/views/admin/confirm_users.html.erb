@@ -1,0 +1,28 @@
+<h1>Unconfirmed Users</h1>
+
+<% if @unconfirmed_users.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Created at</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @unconfirmed_users.each do |user| %>
+        <tr>
+          <td><%= user.email %></td>
+          <td><%= user.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+          <td>
+            <%= button_to "Confirm User", admin_confirm_user_path(user), method: :post, class: "btn btn-primary btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No unconfirmed users found.</p>
+<% end %>
+
+<%= link_to "Back to Home", root_path, class: "btn btn-secondary" %>

@@ -8,7 +8,7 @@ load_dotenv()
 genai.configure(api_key=os.getenv("Gemini"))
 
 def query_generator(schema, user_q):
-    model = genai.GenerativeModel(model_name="gemini-1.5-flash-002")
+    model = genai.GenerativeModel(model_name="gemini-2.0-flash")
     
     prompt = f"""
     You are an expert in writing optimized and accurate MySQL queries.
